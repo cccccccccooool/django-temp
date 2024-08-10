@@ -12,7 +12,5 @@ def getElemt(request):
         lines = lines.split('@')
         for line in lines:
             category, items = line.strip().split(':')
-            print(category,items)
             elemt_dict[category] = items.split(',')
-        print(elemt_dict)
     return JsonResponse(elemt_dict)
