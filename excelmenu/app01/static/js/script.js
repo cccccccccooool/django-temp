@@ -10,6 +10,11 @@ window.onload = () => {
         .catch(error => console.error('Error:', error));
 };
 
+document.addEventListener('DOMContentLoaded', (event) => {
+        const dateInput = document.getElementById('date');
+        dateInput.value = new Date().toISOString().split('T')[0];
+});
+
 let allOp = {};
 
 function initializeSelects() {
@@ -83,6 +88,31 @@ function addRow() {
 
     table.appendChild(newRow);
     updateRowNumbers();
+}
+
+function downloadPDF() {
+    // 隐藏所有的select元素
+    const selects1 = document.getElementsByClassName('secondMenu');
+    const selects2 = document.getElementsByClassName('categorySelect');
+    Array.from(selects1).forEach(select => select.style.display = 'none');
+    Array.from(selects2).forEach(select => select.style.display = 'none');
+
+
+    const element = document.getElementById('dataForm');
+    console.log('Starting PDF generation...');
+
+    html2pdf().from(element).save()
+    .then(() => {
+        console.log('PDF generated and download triggered.');
+        // 恢复所有select元素的显示
+        Array.from(selects1).forEach(select => select.style.display = '');
+        Array.from(selects2).forEach(select => select.style.display = '');
+    })
+    .catch(error => {
+        console.error('Error during PDF generation:', error);
+        // 确保即使出错也恢复显示
+        selects.forEach(select => select.style.display = '');
+    });
 }
 
 function updateRowNumbers() {
