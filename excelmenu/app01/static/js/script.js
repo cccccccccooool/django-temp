@@ -30,6 +30,8 @@ function initializeSelects() {
             select.appendChild(option);
         }
         select.onchange = function() { nextMuen(this); };
+        // 初始化每行的二级菜单
+        nextMuen(select);
     });
 
     const secondMenus = document.querySelectorAll('.secondMenu');
@@ -86,8 +88,15 @@ function addRow() {
     secondMenu.style.display = 'none';
     customInput.value = '';
 
+    // 为新行设置事件处理器
+    categorySelect.onchange = function() { nextMuen(this); };
+    secondMenu.onchange = function() { updateInput(this); };
+
     table.appendChild(newRow);
     updateRowNumbers();
+
+    // 初始化新行的二级菜单
+    nextMuen(categorySelect);
 }
 
 function downloadPDF() {
