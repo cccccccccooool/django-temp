@@ -11,12 +11,19 @@ class allow_ip_middleware(MiddlewareMixin):
         sha256 = hashlib.sha256()
         sha256.update(ip_address.encode('utf-8'))
         hash_value = sha256.hexdigest()
-        current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-        data=f'访问时间{current_time} ip地址{ip_address}\n'
-        with open('./app01/static/txt/ip.txt', "a", encoding='utf-8') as fp:
-            fp.write(data)
         if hash_value not in can_ip:
             return redirect('http://www.baidu.com')
 
+    def process_response(self, request, response):
+        return response
+
+class write_ip(MiddlewareMixin):
+    def process_request(self, request):
+        if request.path=='/':
+            ip_address = request.META.get('REMOTE_ADDR')
+            current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            data=f'访问时间{current_time} ip地址{ip_address}\n'
+            with open('./app01/static/txt/ip.txt', "a", encoding='utf-8') as fp:
+                fp.write(data)
     def process_response(self, request, response):
         return response
