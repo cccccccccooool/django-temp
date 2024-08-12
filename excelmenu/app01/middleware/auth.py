@@ -5,7 +5,6 @@ from django.utils.deprecation import MiddlewareMixin
 
 class allow_ip_middleware(MiddlewareMixin):
     def process_request(self, request):
-        can_ip=['127.0.0.1','183.9.65.99','120.87.218.47']
         ip_address = request.META.get('REMOTE_ADDR')
         current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         data=f'访问时间{current_time} ip地址{ip_address}\n'
