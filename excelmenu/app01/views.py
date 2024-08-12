@@ -14,3 +14,12 @@ def getElemt(request):
             category, items = line.strip().split(':')
             elemt_dict[category] = items.split(',')
     return JsonResponse(elemt_dict)
+
+def print_ip(request):
+    ip_data={}
+    with open('./app01/static/txt/ip.txt', "r", encoding='utf-8') as fp:
+        lines = fp.read()
+        lines=lines.split('\n')
+        for i,line in enumerate(lines):
+            ip_data[i]=line
+    return JsonResponse(ip_data)
