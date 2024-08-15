@@ -6,18 +6,31 @@ from django.utils.deprecation import MiddlewareMixin
 
 class allow_ip_middleware(MiddlewareMixin):
     def process_request(self, request):
-        can_ip=['5909dbb7f903a6bcffec3a05a1d5f33b275659feaddc55831a16ebd1a90e92b5','da135c4a34b29c4db77f062e2da21e4a514eb5d50034e6c96beb21e0751ca4d6','0f03a4c577b5754def4855be3c3f5a420c2c80daba4ec64c799a4a57a75727eb','d6375d91abb8048a03da5e018e40c1b0eb306b7525d0dbf6ba5dc031b4b4646d','be2b775cb8cd43b8c85763d3c635f7ad4b208a6dac6755f6b734971475e2f083']
+        can_ip=['b8aed072d29403ece56ae9641638ddd50d420f950bde0eefc092ee8879554141','d6375d91abb8048a03da5e018e40c1b0eb306b7525d0dbf6ba5dc031b4b4646d','be2b775cb8cd43b8c85763d3c635f7ad4b208a6dac6755f6b734971475e2f083']
         ip_address = request.META.get('REMOTE_ADDR')
-        ip_a='.'.join(ip_address.split('.')[0:2])
-        sha256 = hashlib.sha256()
-        sha256.update(ip_a.encode('utf-8'))
-        hash_value = sha256.hexdigest()
-        if hash_value not in can_ip:
+        hash_list=self.sha256_encode(ip_address)
+        flag=False
+        for ip_duan in hash_list:
+            if ip_duan in can_ip:
+                flag=True
+        if not flag:
             return redirect('http://www.baidu.com')
 
     def process_response(self, request, response):
         return response
 
+    def sha256_encode(self,ip_address):
+        ip_1='.'.join(ip_address.split('.')[0:1])
+        ip_2='.'.join(ip_address.split('.')[0:2])
+        hash_list=[]
+        sha256 = hashlib.sha256()
+        sha256.update(ip_1.encode('utf-8'))
+        hash_list.append(sha256.hexdigest())
+
+        sha256 = hashlib.sha256()
+        sha256.update(ip_2.encode('utf-8'))
+        hash_list.append(sha256.hexdigest())
+        return hash_list
 class write_ip(MiddlewareMixin):
     def process_request(self, request):
         if request.path=='/':
