@@ -6,7 +6,7 @@ from django.utils.deprecation import MiddlewareMixin
 
 class allow_ip_middleware(MiddlewareMixin):
     def process_request(self, request):
-        can_ip=['b8aed072d29403ece56ae9641638ddd50d420f950bde0eefc092ee8879554141','d6375d91abb8048a03da5e018e40c1b0eb306b7525d0dbf6ba5dc031b4b4646d','be2b775cb8cd43b8c85763d3c635f7ad4b208a6dac6755f6b734971475e2f083']
+        can_ip=['b8aed072d29403ece56ae9641638ddd50d420f950bde0eefc092ee8879554141','d6375d91abb8048a03da5e018e40c1b0eb306b7525d0dbf6ba5dc031b4b4646d','be2b775cb8cd43b8c85763d3c635f7ad4b208a6dac6755f6b734971475e2f083','6ea9726cad599cc417f0fe20823a73df56c922384cae3ba69adc1ebf433a84d3']
         ip_address = request.META.get('REMOTE_ADDR')
         hash_list=self.sha256_encode(ip_address)
         flag=False
